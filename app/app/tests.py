@@ -10,4 +10,4 @@ class CalcTests(TestCase):
         
     def test_subract_numbers(self):
         """Test that two numbers are subracted together"""
-        self.assertEqual(sub(10, 5), -5)
+        self.assertEqual(sub(10, 5), 5)
