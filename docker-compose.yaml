@@ -2,12 +2,30 @@ version: "3"
 
 services:
     app:
+        restart: always
         build:
             context: .
+        expose:
+            - 8000
+        volumes:
+            - ./app:/app
+            - static_volume:/home/app/app/static
+        command: >
+            sh -c """
+                    gunicorn app.wsgi:application -w 2 -b :8000 --reload
+                """
+
+    nginx:
+        image: nginx:latest
+        container_name: NGINXDOCKERNAME3
         ports:
             - "8000:8000"
         volumes:
             - ./app:/app
-        command: >
-            sh -v "python manage.py runserver 0.0.0.0:8000"
-        
+            - ./config/nginx:/etc/nginx/conf.d
+            - ./static:/static
+        depends_on:
+            - app
+
+volumes:
+    static_volume:
