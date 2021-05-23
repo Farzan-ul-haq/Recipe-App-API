@@ -12,9 +12,9 @@ services:
         volumes:
             - ./app:/app
         command: >
-            sh -c """
-            python manage.py migrate &&
-            gunicorn app.wsgi:application -w 2 -b :8000 --reload
+            sh -c """python manage.py wait_for_db &&
+                     python manage.py migrate &&
+                     gunicorn app.wsgi:application -w 2 -b :8000 --reload
                 """
         environment:
             - SQL_ENGINE=django.db.backends.postgresql_psycopg2
