@@ -29,6 +29,9 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['-name']
+
 
 class Ingredient(models.Model):
     """Ingredient to be used in a recipe"""
@@ -40,3 +43,6 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['-name']
