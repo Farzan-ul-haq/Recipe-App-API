@@ -6,9 +6,9 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.models import Tag
-
 from recipe.serializers import TagSerializer
 
+from core.utils.sample_object import sample_user, sample_tag
 
 TAGS_URL = reverse("recipe:tag-list")
 
@@ -30,16 +30,13 @@ class PrivateTagsApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = get_user_model().objects.create_user(
-            'admin@gmail.com',
-            'testpassword'
-        )
+        self.user = sample_user()
         self.client.force_authenticate(self.user)
 
     def test_retrieve_tags(self):
         """Test Retrieving Tags"""
-        Tag.objects.create(user=self.user, name='vegan')
-        Tag.objects.create(user=self.user, name='Dessert')
+        sample_tag(user=self.user, name='Vegan')
+        sample_tag(user=self.user, name='Dessert')
 
         resp = self.client.get(TAGS_URL)
 
@@ -51,12 +48,9 @@ class PrivateTagsApiTests(TestCase):
 
     def test_tags_limited_to_user(self):
         """Test that tags returned are for the authenticated user"""
-        user2 = get_user_model().objects.create_user(
-            'admin2@gmail.com',
-            'testpassword'
-        )
-        Tag.objects.create(user=user2, name='Fruity')
-        tag = Tag.objects.create(user=self.user, name='Comfort Food')
+        user2 = sample_user(email='admin2@gmail.com')
+        sample_tag(user=user2, name='Fruity')
+        tag = sample_tag(user=self.user, name='Comfort Food')
 
         resp = self.client.get(TAGS_URL)
 

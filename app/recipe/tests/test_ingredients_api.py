@@ -6,8 +6,9 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.models import Ingredient
-
 from recipe.serializers import IngredientSerializer
+
+from core.utils.sample_object import sample_user, sample_ingredient
 
 INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
@@ -30,16 +31,13 @@ class PrivateIngredientApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = get_user_model().objects.create_user(
-            'admin@gmail.com',
-            'testpassword'
-        )
+        self.user = sample_user()
         self.client.force_authenticate(self.user)
 
     def test_retrieve_ingredient_list(self):
         """Test retrieving a list of ingredients"""
-        Ingredient.objects.create(user=self.user, name='Kale')
-        Ingredient.objects.create(user=self.user, name='Salt')
+        sample_ingredient(user=self.user, name='Sugar')
+        sample_ingredient(user=self.user, name='Salt')
 
         resp = self.client.get(INGREDIENTS_URL)
 
@@ -53,13 +51,10 @@ class PrivateIngredientApiTests(TestCase):
         """Test that only ingredients for the
         authenticated user are returned"""
 
-        user2 = get_user_model().objects.create_user(
-            'admin2@gmail.com',
-            'testpassword'
-        )
-        Ingredient.objects.create(user=user2, name='Vinegar')
+        user2 = sample_user(email='admin2@gmail.com')
+        sample_ingredient(user=user2, name='Vinegar')
 
-        ingredient = Ingredient.objects.create(user=self.user, name='Tumeric')
+        ingredient = sample_ingredient(user=self.user, name='Tumeric')
 
         resp = self.client.get(INGREDIENTS_URL)
 
