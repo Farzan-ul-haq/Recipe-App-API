@@ -1,4 +1,4 @@
-import re
+
 from django.test import TestCase
 from django.urls import reverse
 
@@ -94,7 +94,6 @@ class PrivateRecipeApiTests(TestCase):
         for key in payload.keys():
             self.assertEqual(payload[key], getattr(recipe, key))
 
-
     def test_create_recipe_with_tags(self):
         """Test creating a recipe with tags"""
         tag1 = sample_tag(user=self.user, name='Vegan')
@@ -138,4 +137,3 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(ingredients.count(), 2)
         self.assertIn(ingredient1, ingredients)
         self.assertIn(ingredient2, ingredients)
-        
