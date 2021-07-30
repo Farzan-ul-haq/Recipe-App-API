@@ -1,11 +1,10 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Recipe, Tag, Ingredient
+from core.models import Recipe
 from recipe.serializers import RecipeSerializer, RecipeDetailSerializer
 
 from core.utils.sample_object import sample_user, sample_tag, \
@@ -79,4 +78,3 @@ class PrivateRecipeApiTests(TestCase):
         serializer = RecipeDetailSerializer(recipe)
 
         self.assertEqual(resp.data, serializer.data)
-

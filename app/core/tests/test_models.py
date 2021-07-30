@@ -1,7 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 
-from core import models
 from core.utils.sample_object import sample_user, sample_superuser, \
                                      sample_tag, sample_ingredient, \
                                      sample_recipe
@@ -25,7 +23,8 @@ class ModelTests(TestCase):
 
     def test_new_user_email_normalized(self):
         """Test the email for a new user is normalized"""
-        user = sample_user(email=self.destabilize_email, password=self.password)
+        user = sample_user(email=self.destabilize_email,
+                           password=self.password)
 
         self.assertEqual(user.email, self.normalize_email)
 
@@ -36,7 +35,8 @@ class ModelTests(TestCase):
 
     def test_create_super_user(self):
         """Test creating a new superuser"""
-        user = sample_superuser(email=self.superuser_email, password=self.password)
+        user = sample_superuser(email=self.superuser_email,
+                                password=self.password)
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
