@@ -1,5 +1,8 @@
+from unittest.mock import patch
+
 from django.test import TestCase
 
+from core.models import recipe_image_file_path
 from core.utils.sample_object import sample_user, sample_superuser, \
                                      sample_tag, sample_ingredient, \
                                      sample_recipe
@@ -69,3 +72,14 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(recipe), recipe.title)
+
+    @patch('uuid.uuid4')
+    def test_recipe_file_name_uuid(self, mock_uuid):
+        """Test that image is aved in the correct location"""
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+        file_path = recipe_image_file_path(None, 'myimage.jpeg')
+
+        exp_path = f'uploads/recipe/{uuid}.jpeg'
+
+        self.assertEqual(file_path, exp_path)
