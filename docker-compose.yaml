@@ -35,6 +35,7 @@ services:
             - ./app:/app
             - ./config/nginx:/etc/nginx/conf.d
             - ./static:/static
+            - ./media:/media
         depends_on:
             - app
 
